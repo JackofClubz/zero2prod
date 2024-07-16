@@ -1,4 +1,6 @@
+use std::net::TcpListener;
 use actix_web::{web, App, HttpRequest, HttpResponse, HttpServer, Responder};
+use tokio::net::tcp;
 use zero2prod::run;
 
 async fn health_check(_req: HttpRequest) -> impl Responder {
@@ -7,7 +9,6 @@ async fn health_check(_req: HttpRequest) -> impl Responder {
 
 #[tokio::main]
 async fn main() -> Result<(), std::io::Error> {
-// Bubble up the io::Error if we failed to bind the address
-// Otherwise call .await on our Server
-run()?.await
+    let address = TcpListener::bind("127.0.0.1:8000")?;
+    run(address)?.await
 }
