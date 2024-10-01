@@ -1,37 +1,32 @@
 [package]
 name = "zero2prod"
 version = "0.1.0"
+authors = ["LukeMathWalker <rust@lpalmieri.com>"]
 edition = "2021"
 
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 [lib]
 path = "src/lib.rs"
 
-[target.x86_64-pc-windows-msvc]
-rustflags = ["-C", "link-arg=-fuse-ld=lld"]
-[target.x86_64-pc-windows-gnu]
-rustflags = ["-C", "link-arg=-fuse-ld=lld"]
+[[bin]]
+path = "src/main.rs"
+name = "zero2prod"
 
 [dependencies]
-actix = "0.13.3"
 actix-web = "4"
-tokio = { version = "1", features = ["macros", "rt-multi-thread"]}
-serde = { version = "1.0", features = ["derive"] }
-config = "0.13"
+tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
+serde = "1.0.115"
+config = { version = "0.14", default-features = false, features = ["yaml"] }
+sqlx = { version = "0.8", default-features = false, features = [
+    "runtime-tokio-rustls",
+    "macros",
+    "postgres",
+    "uuid",
+    "chrono",
+    "migrate",
+] }
 uuid = { version = "1", features = ["v4"] }
 chrono = { version = "0.4.22", default-features = false, features = ["clock"] }
 
 [dev-dependencies]
-reqwest = "0.11"
-
-# Using table-like toml syntax to avoid a super-long line!
-[dependencies.sqlx]
-version = "0.6"
-default-features = false
-features = [
-"runtime-tokio-rustls",
-"macros",
-"postgres",
-"uuid",
-"chrono",
-"migrate"
-]
+reqwest = { version = "0.12", features = ["json"] }
